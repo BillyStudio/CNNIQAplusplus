@@ -145,6 +145,7 @@ class CNNIQAplusplusnet(nn.Module):
         self.fc3_d = nn.Linear(n2_nodes, n_distortions)
 
     def forward(self, x):
+        #print('original input size:', x.shape)
         x  = x.view(-1, x.size(-3), x.size(-2), x.size(-1))  #
         h  = self.conv1(x)
         h  = self.pool1(h)
@@ -288,6 +289,8 @@ def run(train_batch_size, epochs, lr, weight_decay, model_name, config, exp_id, 
             print("Final Test Results - Epoch: {} Acc:  {:.2f}% SROCC: {:.4f} KROCC: {:.4f} PLCC: {:.4f} RMSE: {:.4f} MAE: {:.4f} OR: {:.2f}%"
                 .format(best_epoch, 100 * Acc, SROCC, KROCC, PLCC, RMSE, MAE, 100 * OR))
             np.save(save_result_file, (Acc, SROCC, KROCC, PLCC, RMSE, MAE, OR))
+            torch.save(model.state_dict(), 'model_parameters')
+
 
     # kick everything off
     trainer.run(train_loader, max_epochs=epochs)

@@ -83,6 +83,7 @@ class IQADataset(Dataset):
             im = self.loader(os.path.join(im_dir, im_names[idx]))
 
             patches = OverlappingCropPatches(im, self.patch_size, self.stride)
+            print('patches number after spliting:', len(patches))
             if status == 'train':
                 self.patches = self.patches + patches #
                 for i in range(len(patches)):
@@ -99,6 +100,7 @@ class IQADataset(Dataset):
         return len(self.patches)
 
     def __getitem__(self, idx):
+        #print('get item self.patches[{}] with size {}'.format(idx, self.patches[idx].shape))
         return (self.patches[idx], (torch.Tensor([self.label[idx],]),
                 torch.Tensor([self.label_std[idx],]), 
                 torch.Tensor([self.label2[idx],])))
